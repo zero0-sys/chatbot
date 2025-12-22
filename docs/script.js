@@ -3,7 +3,7 @@ const userInput = document.getElementById("userInput");
 const sendBtn = document.getElementById("sendBtn");
 
 /* =========================
-   USER ID
+   USER ID (MEMORY PER USER)
    ========================= */
 let userId = localStorage.getItem("matrix_user_id");
 
@@ -28,42 +28,35 @@ function addMessage(text, sender) {
   div.className = `message ${sender}`;
   div.innerText = text;
   chatContainer.appendChild(div);
-  chatContainer.scrollTop = chatContainer.scrollHeight;
-  return div;
-}
 
-/* =========================
-   TYPING EFFECT
-   ========================= */
-function typeText(el, text) {
-  el.innerText = "";
-  let i = 0;
-  const speed = 18;
-
-  function typing() {
-    if (i < text.length) {
-      el.innerText += text.charAt(i);
-      i++;
-      chatContainer.scrollTop = chatContainer.scrollHeight;
-      setTimeout(typing, speed);
-    }
-  }
-
-  typing();
+  chatContainer.scrollTo({
+    top: chatContainer.scrollHeight,
+    behavior: "smooth"
+  });
 }
 
 /* =========================
    SEND MESSAGE
    ========================= */
+
 async function sendMessage() {
   const text = userInput.value.trim();
   if (!text) return;
 
   addMessage(text, "user");
   userInput.value = "";
+
   sendBtn.disabled = true;
 
-  const botDiv = addMessage("Matrix lagi mikir...", "bot");
+  const typing = document.createElement("div");
+  typing.className = "message bot";
+  typing.innerText = "Matrix lagi mikir...";
+  chatContainer.appendChild(typing);
+
+  chatContainer.scrollTo({
+    top: chatContainer.scrollHeight,
+    behavior: "smooth"
+  });
 
   try {
     const res = await fetch("https://chatbot-production-84b4.up.railway.app/chat", {
@@ -76,12 +69,12 @@ async function sendMessage() {
     });
 
     const data = await res.json();
-
-    // ⬇️ INI KUNCI NYA
-    typeText(botDiv, data.reply);
+    typing.remove();
+    addMessage(data.reply, "bot");
 
   } catch (err) {
-    botDiv.innerText = "❌ Matrix error. Coba lagi.";
+    typing.remove();
+    addMessage("❌ Gagal terhubung ke server", "bot");
   } finally {
     sendBtn.disabled = false;
   }
