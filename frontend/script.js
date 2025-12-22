@@ -29,7 +29,7 @@ async function sendMessage() {
   chatContainer.scrollTop = chatContainer.scrollHeight;
 
   try {
-    const res = await fetch("https://NAMA-BACKEND.onrender.com/chat", {
+    const res = await fetch("https//:chatbot-production-84b4.up.railway.app/chat", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ message: text })
