@@ -16,21 +16,17 @@ const openai = new OpenAI({
 app.post("/chat", async (req, res) => {
   try {
     const userMessage = req.body.message;
-
     if (!userMessage) {
       return res.status(400).json({ error: "Pesan kosong" });
     }
 
-    const completion = await openai.chat.completions.create({
-      model: "gpt-5.2",
-      messages: [
-        { role: "system", content: "Kamu adalah asisten akademik yang ramah dan membantu." },
-        { role: "user", content: userMessage }
-      ]
+    const response = await openai.responses.create({
+      model: "gpt-4o-mini",
+      input: userMessage
     });
 
     res.json({
-      reply: completion.choices[0].message.content
+      reply: response.output_text
     });
 
   } catch (error) {
