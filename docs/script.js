@@ -3,7 +3,7 @@ const userInput = document.getElementById("userInput");
 const sendBtn = document.getElementById("sendBtn");
 
 /* =========================
-   USER ID (MEMORY PER USER)
+   USER ID
    ========================= */
 let userId = localStorage.getItem("matrix_user_id");
 
@@ -28,7 +28,6 @@ function addMessage(text, sender) {
   div.className = `message ${sender}`;
   div.innerText = text;
   chatContainer.appendChild(div);
-
   chatContainer.scrollTop = chatContainer.scrollHeight;
   return div;
 }
@@ -36,13 +35,14 @@ function addMessage(text, sender) {
 /* =========================
    TYPING EFFECT
    ========================= */
-function typeText(element, text) {
+function typeText(el, text) {
+  el.innerText = "";
   let i = 0;
-  const speed = 18; // makin kecil makin cepat
+  const speed = 18;
 
   function typing() {
     if (i < text.length) {
-      element.innerText += text.charAt(i);
+      el.innerText += text.charAt(i);
       i++;
       chatContainer.scrollTop = chatContainer.scrollHeight;
       setTimeout(typing, speed);
@@ -53,7 +53,7 @@ function typeText(element, text) {
 }
 
 /* =========================
-   SEND MESSAGE (STREAMING)
+   SEND MESSAGE
    ========================= */
 async function sendMessage() {
   const text = userInput.value.trim();
@@ -63,13 +63,7 @@ async function sendMessage() {
   userInput.value = "";
   sendBtn.disabled = true;
 
-  // bubble bot kosong (buat streaming)
-  const botDiv = document.createElement("div");
-  botDiv.className = "message bot";
-  botDiv.innerText = "";
-  chatContainer.appendChild(botDiv);
-
-  chatContainer.scrollTop = chatContainer.scrollHeight;
+  const botDiv = addMessage("Matrix lagi mikir...", "bot");
 
   try {
     const res = await fetch("https://chatbot-production-84b4.up.railway.app/chat", {
@@ -81,20 +75,10 @@ async function sendMessage() {
       })
     });
 
-    // STREAM READER
-    const reader = res.body.getReader();
-    const decoder = new TextDecoder("utf-8");
+    const data = await res.json();
 
-    let done = false;
-    while (!done) {
-      const { value, done: doneReading } = await reader.read();
-      done = doneReading;
-
-      if (value) {
-        const chunk = decoder.decode(value);
-        typeText(botDiv, chunk);
-      }
-    }
+    // ⬇️ INI KUNCI NYA
+    typeText(botDiv, data.reply);
 
   } catch (err) {
     botDiv.innerText = "❌ Matrix error. Coba lagi.";
