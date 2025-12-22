@@ -10,17 +10,20 @@
 body {
   min-height: 100vh;
   background: linear-gradient(
-    135deg,
+    120deg,
     #0f0f1a,
     #1a103d,
-    #0a2540
+    #0a2540,
+    #1b2a4e
   );
+  background-size: 400% 400%;
+  animation: gradientMove 18s ease infinite;
+
   display: flex;
   justify-content: center;
   align-items: center;
   color: #eaeaf0;
 }
-
 
 .bg {
   position: fixed;
@@ -79,12 +82,12 @@ body {
 
 .info h1 {
   font-size: 18px;
-  color: #111;
+  color: #ffff;
 }
 
 .info p {
   font-size: 13px;
-  color: #333;
+  color: #ffff;
   opacity: 0.8;
 }
 
@@ -116,8 +119,8 @@ body {
 
 .message.bot {
   align-self: flex-start;
-  background: rgba(255,255,255,0.6);
-  color: #111;
+  background: linear-gradient(135deg, #5f9cff, #7c7cff);
+  color: white;
   border-bottom-left-radius: 6px;
 }
 
@@ -167,5 +170,17 @@ body {
 @media (min-width: 1024px) {
   .app {
     max-width: 600px;
+  }
+}
+
+@keyframes gradientMove {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
   }
 }
