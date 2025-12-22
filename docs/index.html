@@ -3,48 +3,135 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>MATRIX Chatbot</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>Matrix AI</title>
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Tailwind Config -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            neon: '#ff3ea5',
+            cyan: '#00f0ff'
+          },
+          animation: {
+            gradient: 'gradient 8s ease infinite',
+            loadingBar: 'loadingBar 1.5s ease-in-out infinite',
+            float: 'float 4s ease-in-out infinite'
+          },
+          keyframes: {
+            gradient: {
+              '0%': { backgroundPosition: '0% 50%' },
+              '50%': { backgroundPosition: '100% 50%' },
+              '100%': { backgroundPosition: '0% 50%' }
+            },
+            loadingBar: {
+              '0%': { width: '0%' },
+              '50%': { width: '80%' },
+              '100%': { width: '0%' }
+            },
+            float: {
+              '0%,100%': { transform: 'translateY(0)' },
+              '50%': { transform: 'translateY(-8px)' }
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Orbitron', sans-serif;
+    }
+  </style>
 </head>
-<body>
-  <div class="bg"></div>
 
-  <main class="app">
-    <!-- HEADER / PROFILE -->
-    <header class="header glass">
-      <div class="profile">
-        <div class="avatar">
-  <img src="avatar.gif" alt="Matrix Avatar" />
-</div>
+<body class="min-h-screen bg-gradient-to-br from-black via-[#0a0a0f] to-[#120016]
+             bg-[length:400%_400%] animate-gradient text-white flex items-center justify-center">
 
-        <div class="info">
-          <h1>MATRIX</h1>
-          <p>Asisten AI • Adaptif & Elegan</p>
-        </div>
+  <!-- LOADING SCREEN -->
+  <div id="loadingScreen"
+       class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black text-cyan-400 tracking-widest">
+    <div class="text-xl mb-4 animate-pulse">
+      INITIALIZING MATRIX SYSTEM
+    </div>
+    <div class="w-64 h-2 bg-white/10 rounded overflow-hidden">
+      <div class="h-full bg-gradient-to-r from-neon to-cyan animate-loadingBar"></div>
+    </div>
+    <div class="mt-6 text-xs text-white/40">
+      Neural Interface • v1.0
+    </div>
+  </div>
+
+  <!-- APP CONTAINER -->
+  <div class="w-full max-w-md h-[92vh] bg-white/10 backdrop-blur-xl
+              border border-white/20 rounded-2xl shadow-2xl
+              flex flex-col overflow-hidden">
+
+    <!-- HEADER -->
+    <div class="flex items-center gap-4 px-5 py-4 border-b border-white/10">
+      <img src="matrix.gif"
+           class="w-14 h-14 rounded-full border-2 border-neon shadow-lg animate-float"
+           alt="Matrix AI"/>
+
+      <div>
+        <div class="text-lg font-semibold text-neon">MATRIX</div>
+        <div class="text-xs text-white/60">Cyberpunk AI Assistant</div>
       </div>
-    </header>
+    </div>
 
     <!-- CHAT AREA -->
-    <section id="chatContainer" class="chat glass">
-      <div class="message bot">
-        Halo 👋 Aku MATRIX. Ada yang bisa kubantu hari ini?
+    <div id="chatContainer"
+         class="flex-1 overflow-y-auto px-4 py-3 space-y-3 text-sm">
+
+      <div class="bg-white/10 px-4 py-2 rounded-xl w-fit max-w-[85%]">
+        👋 Halo, saya <span class="text-neon">Matrix</span>.  
+        Ada yang bisa saya bantu?
       </div>
-    </section>
+
+    </div>
 
     <!-- INPUT -->
-    <footer class="input-wrap glass">
-      <input
-        id="userInput"
-        type="text"
-        placeholder="Tulis pesan di sini…"
-        autocomplete="off"
-      />
-      <button id="sendBtn" aria-label="Kirim">
-        ➤
-      </button>
-    </footer>
-  </main>
+    <div class="p-4 border-t border-white/10">
+      <div class="flex gap-2">
+        <input id="userInput"
+               type="text"
+               placeholder="Ketik pesan..."
+               class="flex-1 bg-black/40 border border-white/20
+                      rounded-xl px-4 py-2 text-sm outline-none
+                      focus:border-neon"/>
 
+        <button id="sendBtn"
+                class="bg-gradient-to-r from-neon to-cyan
+                       px-4 rounded-xl text-black font-semibold
+                       hover:scale-105 transition">
+          ➤
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- SCRIPT -->
   <script src="script.js"></script>
+
+  <!-- LOADING HANDLER -->
+  <script>
+    window.addEventListener("load", () => {
+      setTimeout(() => {
+        const loader = document.getElementById("loadingScreen");
+        loader.classList.add("opacity-0");
+        setTimeout(() => loader.remove(), 500);
+      }, 1600);
+    });
+  </script>
+
 </body>
 </html>
