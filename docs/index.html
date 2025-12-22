@@ -74,7 +74,7 @@
           transparent 3px
         );
       pointer-events: none;
-      animation: glitchMove 0.2s infinite;
+      animation: glitchMove 0.25s infinite;
       z-index: -1;
     }
 
@@ -114,17 +114,19 @@
   </div>
 
   <!-- APP -->
-  <div class="w-full max-w-md
-            h-[100dvh]
-            bg-white/10 backdrop-blur-xl
-            border border-white/20
-            rounded-none sm:rounded-2xl
-            shadow-2xl
-            flex flex-col overflow-hidden">
+  <div class="w-full max-w-md h-[100dvh]
+              mx-auto
+              bg-white/10 backdrop-blur-xl
+              border border-white/20
+              rounded-none sm:rounded-2xl
+              shadow-2xl
+              flex flex-col overflow-hidden">
 
-
-    <!-- HEADER -->
-    <div class="flex items-center gap-4 px-5 py-4 border-b border-white/10">
+    <!-- HEADER (STICKY) -->
+    <div class="shrink-0 z-20
+                flex items-center gap-4 px-5 py-4
+                border-b border-white/10
+                bg-[#020617]/80 backdrop-blur">
       <img src="matrix.gif"
            class="w-12 h-12 rounded-full border border-blue-400"
            alt="Matrix AI">
@@ -134,44 +136,46 @@
       </div>
     </div>
 
-    <!-- CHAT -->
+    <!-- CHAT (SCROLL AREA) -->
     <div id="chatContainer"
-         class="flex-1 overflow-y-auto px-4 py-4 space-y-3 text-sm flex flex-col">
+         class="flex-1 overflow-y-auto px-4 py-4 space-y-3
+                text-sm flex flex-col">
       <div class="message bot">
-        Hoii, gue Matrix. Ada yang bisa saya bantu?
+        Hoii, gue Matrix. Ada yang bisa gue bantu?
       </div>
     </div>
 
-    <!-- INPUT (FIXED BUTTON) -->
-   <!-- INPUT -->
-<div class="px-4 py-3 border-t border-white/10
-            bg-[#020617]/90
-            backdrop-blur-xl
-            pb-[env(safe-area-inset-bottom)]">
+    <!-- INPUT AREA -->
+    <div class="shrink-0
+                px-4 pt-3
+                pb-[calc(env(safe-area-inset-bottom)+12px)]
+                border-t border-white/10
+                bg-[#020617]/90 backdrop-blur-xl">
 
-  <div class="flex items-center gap-3">
-    <input
-      id="userInput"
-      type="text"
-      placeholder="Ketik pesan..."
-      class="flex-1 min-w-0
-             bg-black/40 border border-white/20
-             rounded-xl px-4 py-3 text-sm
-             outline-none text-white
-             focus:border-blue-400"/>
+      <div class="flex items-center gap-3">
+        <input
+          id="userInput"
+          type="text"
+          placeholder="Ketik pesan..."
+          class="flex-1 min-w-0
+                 bg-black/40 border border-white/20
+                 rounded-xl px-4 py-3 text-sm
+                 outline-none text-white
+                 focus:border-blue-400"/>
 
-    <button
-      id="sendBtn"
-      class="shrink-0 w-12 h-12
-             flex items-center justify-center
-             rounded-xl
-             bg-gradient-to-r from-blue-600 to-blue-400
-             text-black font-bold
-             active:scale-95 transition">
-      ➤
-    </button>
-  </div>
-</div>
+        <button
+          id="sendBtn"
+          class="shrink-0 w-12 h-12
+                 flex items-center justify-center
+                 rounded-xl
+                 bg-gradient-to-r from-blue-600 to-blue-400
+                 text-black font-bold
+                 active:scale-95 transition">
+          ➤
+        </button>
+      </div>
+    </div>
+
   </div>
 
   <script src="script.js"></script>
@@ -183,5 +187,6 @@
       }, 2500);
     });
   </script>
+
 </body>
 </html>
