@@ -3,34 +3,47 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>AI Chatbot</title>
-  <link rel="stylesheet" href="style.css"/>
+  <title>MATRIX Chatbot</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <div class="bg"></div>
 
-<div class="app">
-  <header class="header">
-    <h1>matrix</h1>
-    <p>Asisten Berbasis API OPEN AI</p>
-  </header>
+  <main class="app">
+    <!-- HEADER / PROFILE -->
+    <header class="header glass">
+      <div class="profile">
+        <div class="avatar">
+          <span>M</span>
+        </div>
+        <div class="info">
+          <h1>MATRIX</h1>
+          <p>Asisten AI • Adaptif & Elegan</p>
+        </div>
+      </div>
+    </header>
 
-  <main class="chat-container" id="chatContainer">
-    <div class="message bot">
-      Halo 👋 Aku asisten berbasis API OPEN AI. Ada yang bisa aku bantu?
-    </div>
+    <!-- CHAT AREA -->
+    <section id="chatContainer" class="chat glass">
+      <div class="message bot">
+        Halo 👋 Aku MATRIX. Ada yang bisa kubantu hari ini?
+      </div>
+    </section>
+
+    <!-- INPUT -->
+    <footer class="input-wrap glass">
+      <input
+        id="userInput"
+        type="text"
+        placeholder="Tulis pesan di sini…"
+        autocomplete="off"
+      />
+      <button id="sendBtn" aria-label="Kirim">
+        ➤
+      </button>
+    </footer>
   </main>
 
-  <footer class="input-area">
-    <input 
-      type="text" 
-      id="userInput" 
-      placeholder="Ketik pesan..."
-      autocomplete="off"
-    />
-    <button id="sendBtn">Kirim</button>
-  </footer>
-</div>
-
-<script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
