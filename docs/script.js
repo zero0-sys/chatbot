@@ -28,35 +28,42 @@ function addMessage(text, sender) {
   div.className = `message ${sender}`;
   div.innerText = text;
   chatContainer.appendChild(div);
+  chatContainer.scrollTop = chatContainer.scrollHeight;
+  return div;
+}
 
-  chatContainer.scrollTo({
-    top: chatContainer.scrollHeight,
-    behavior: "smooth"
-  });
+/* =========================
+   TYPING EFFECT
+   ========================= */
+function typeText(el, text) {
+  el.innerText = "";
+  let i = 0;
+  const speed = 20; // makin kecil makin cepat
+
+  function typing() {
+    if (i < text.length) {
+      el.innerText += text.charAt(i);
+      i++;
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+      setTimeout(typing, speed);
+    }
+  }
+
+  typing();
 }
 
 /* =========================
    SEND MESSAGE
    ========================= */
-
 async function sendMessage() {
   const text = userInput.value.trim();
   if (!text) return;
 
   addMessage(text, "user");
   userInput.value = "";
-
   sendBtn.disabled = true;
 
-  const typing = document.createElement("div");
-  typing.className = "message bot";
-  typing.innerText = "Matrix lagi mikir...";
-  chatContainer.appendChild(typing);
-
-  chatContainer.scrollTo({
-    top: chatContainer.scrollHeight,
-    behavior: "smooth"
-  });
+  const botDiv = addMessage("Matrix lagi mikir...", "bot");
 
   try {
     const res = await fetch("https://chatbot-production-84b4.up.railway.app/chat", {
@@ -69,12 +76,12 @@ async function sendMessage() {
     });
 
     const data = await res.json();
-    typing.remove();
-    addMessage(data.reply, "bot");
+
+    // ⬇️ INI PENTING
+    typeText(botDiv, data.reply);
 
   } catch (err) {
-    typing.remove();
-    addMessage("❌ Gagal terhubung ke server", "bot");
+    botDiv.innerText = "❌ Matrix gagal konek ke server.";
   } finally {
     sendBtn.disabled = false;
   }
