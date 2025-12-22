@@ -29,14 +29,31 @@ function addMessage(text, sender) {
   div.innerText = text;
   chatContainer.appendChild(div);
 
-  chatContainer.scrollTo({
-    top: chatContainer.scrollHeight,
-    behavior: "smooth"
-  });
+  chatContainer.scrollTop = chatContainer.scrollHeight;
+  return div;
 }
 
 /* =========================
-   SEND MESSAGE
+   TYPING EFFECT
+   ========================= */
+function typeText(element, text) {
+  let i = 0;
+  const speed = 18; // makin kecil makin cepat
+
+  function typing() {
+    if (i < text.length) {
+      element.innerText += text.charAt(i);
+      i++;
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+      setTimeout(typing, speed);
+    }
+  }
+
+  typing();
+}
+
+/* =========================
+   SEND MESSAGE (STREAMING)
    ========================= */
 async function sendMessage() {
   const text = userInput.value.trim();
@@ -44,18 +61,15 @@ async function sendMessage() {
 
   addMessage(text, "user");
   userInput.value = "";
-
   sendBtn.disabled = true;
 
-  const typing = document.createElement("div");
-  typing.className = "message bot";
-  typing.innerText = "Matrix lagi mikir...";
-  chatContainer.appendChild(typing);
+  // bubble bot kosong (buat streaming)
+  const botDiv = document.createElement("div");
+  botDiv.className = "message bot";
+  botDiv.innerText = "";
+  chatContainer.appendChild(botDiv);
 
-  chatContainer.scrollTo({
-    top: chatContainer.scrollHeight,
-    behavior: "smooth"
-  });
+  chatContainer.scrollTop = chatContainer.scrollHeight;
 
   try {
     const res = await fetch("https://chatbot-production-84b4.up.railway.app/chat", {
@@ -67,13 +81,23 @@ async function sendMessage() {
       })
     });
 
-    const data = await res.json();
-    typing.remove();
-    addMessage(data.reply, "bot");
+    // STREAM READER
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder("utf-8");
+
+    let done = false;
+    while (!done) {
+      const { value, done: doneReading } = await reader.read();
+      done = doneReading;
+
+      if (value) {
+        const chunk = decoder.decode(value);
+        typeText(botDiv, chunk);
+      }
+    }
 
   } catch (err) {
-    typing.remove();
-    addMessage("❌ Gagal terhubung ke server", "bot");
+    botDiv.innerText = "❌ Matrix error. Coba lagi.";
   } finally {
     sendBtn.disabled = false;
   }
