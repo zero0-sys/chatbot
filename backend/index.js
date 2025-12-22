@@ -22,7 +22,7 @@ app.post("/chat", async (req, res) => {
     }
 
     const completion = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
+      model: "gpt-5.2",
       messages: [
         { role: "system", content: "Kamu adalah asisten akademik yang ramah dan membantu." },
         { role: "user", content: userMessage }
@@ -39,7 +39,7 @@ app.post("/chat", async (req, res) => {
   }
 });
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
   console.log("Backend berjalan di port " + PORT);
 });
