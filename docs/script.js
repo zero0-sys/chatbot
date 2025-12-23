@@ -1,6 +1,7 @@
 const chatContainer = document.getElementById("chatContainer");
 const userInput = document.getElementById("userInput");
 const sendBtn = document.getElementById("sendBtn");
+const micBtn = document.getElementById("micBtn");
 
 /* =========================
    USER ID (MEMORY PER USER)
@@ -38,7 +39,6 @@ function addMessage(text, sender) {
 /* =========================
    SEND MESSAGE
    ========================= */
-
 async function sendMessage() {
   const text = userInput.value.trim();
   if (!text) return;
@@ -70,7 +70,7 @@ async function sendMessage() {
 
     const data = await res.json();
     typing.remove();
-    addMessage(data.reply, "bot");
+    addMessage(data.reply || "…", "bot");
 
   } catch (err) {
     typing.remove();
@@ -78,4 +78,36 @@ async function sendMessage() {
   } finally {
     sendBtn.disabled = false;
   }
-} 
+}
+
+/* =========================
+   🎤 PUSH TO TALK (VOICE)
+   ========================= */
+const SpeechRecognition =
+  window.SpeechRecognition || window.webkitSpeechRecognition;
+
+if (SpeechRecognition) {
+  const recognition = new SpeechRecognition();
+  recognition.lang = "id-ID";
+  recognition.interimResults = false;
+  recognition.continuous = false;
+
+  micBtn.addEventListener("click", () => {
+    recognition.start();
+    micBtn.innerText = "⏺️";
+  });
+
+  recognition.onresult = (event) => {
+    const voiceText = event.results[0][0].transcript;
+    userInput.value = voiceText;
+    sendMessage();
+  };
+
+  recognition.onend = () => {
+    micBtn.innerText = "🎤";
+  };
+
+} else {
+  micBtn.disabled = true;
+  micBtn.innerText = "❌";
+}
