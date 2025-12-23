@@ -220,6 +220,13 @@ Jika user meminta perubahan karakter, ikuti dan konsisten.
         { role: "user", content: message }
       ]
     });
+   let replyText = response.output_text;
+
+if (!replyText || replyText.trim() === "") {
+  replyText = "Sebentar ya… sistem gue lagi kepenuhan. Coba ulangi bentar.";
+}
+
+res.json({ reply: replyText });
 
     const reply = response.output_text;
 
